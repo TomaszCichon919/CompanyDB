@@ -60,13 +60,17 @@ router.put('/departments/:id', async (req, res) => {
     const updatedDep = await Department.findByIdAndUpdate(
       req.params.id,
       { $set: { name: name } },
+      { new: true }
     );
+
+    if (!updatedDep) {
+      return res.status(404).json({ message: 'Document not found' });
+    }
+
     res.json(updatedDep);
-  }
-  catch(err) {
+  } catch(err) {
     res.status(500).json({ message: err });
   }
-
 });
 
 router.delete('/departments/:id', async (req, res) => {
